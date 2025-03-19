@@ -7,6 +7,7 @@ export default function Index() {
   const [client, setClient] = useState<MqttClient| null>(null)
   const translateX = useRef(new Animated.Value(10)).current; // Giá trị khởi tạo của vị trí nút
 
+
   const toggleSwitch = () => {
       if(client){
         const newState = isPumpOn? '0': '1'
