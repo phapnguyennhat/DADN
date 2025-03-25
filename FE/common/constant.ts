@@ -4,6 +4,12 @@ export const FEED_SOIL_HUMIDITY = `${process.env.EXPO_PUBLIC_ADAFRUIT_AIO_USERNA
 
 export const FEED_DHT_20 = `${process.env.EXPO_PUBLIC_ADAFRUIT_AIO_USERNAME}/feeds/dht20`;
 
-export const ADAFRUIT_AIO_USERNAME = process.env.EXPO_PUBLIC_ADAFRUIT_AIO_USERNAME;
+export const ADAFRUIT_AIO_USERNAME =
+    process.env.EXPO_PUBLIC_ADAFRUIT_AIO_USERNAME;
 export const ADAFRUIT_AIO_KEY = process.env.EXPO_PUBLIC_ADAFRUIT_AIO_KEY;
 export const MQTT_BROKER = process.env.EXPO_PUBLIC_MQTT_BROKER;
+
+
+export const BASE_URL_ADAFRUIT = `https://io.adafruit.com/api/v2/${ADAFRUIT_AIO_USERNAME}`
+
+export const STALETIME = 5*60*1000

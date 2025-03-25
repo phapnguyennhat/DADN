@@ -1,14 +1,40 @@
+import { getDhtData,  getHumidityData, getPumpStatus } from "@/api/adafruit";
 import { ADAFRUIT_AIO_KEY, ADAFRUIT_AIO_USERNAME, FEED_DHT_20, FEED_PUMP, FEED_SOIL_HUMIDITY, MQTT_BROKER } from "@/common/constant";
 import { connect, MqttClient } from "@taoqf/react-native-mqtt";
 import { useCallback, useEffect, useState } from "react";
+import { Toast } from "toastify-react-native";
 
 
 export default function useMqtt() {
     const [client, setClient] = useState<MqttClient| null>(null)
-    const [pumpStatus, setPumpStatus] = useState('0')
-    const [dhtData, setDhtData] = useState('0')
-    const [humidityData, setHumidityData]  =useState('0')
+    const [pumpStatus, setPumpStatus] = useState('N/A')
+    const [dhtData, setDhtData] = useState('N/A')
+    const [humidityData, setHumidityData]  =useState('N/A')
 
+    const initData  = async ()=>{
+      try {
+        if(pumpStatus==='N/A'){
+          const pumpStatus = await getPumpStatus()
+          setPumpStatus(pumpStatus)
+        }
+        if(dhtData==='N/A'){
+          const lastDhtData = await getDhtData()
+          setDhtData(lastDhtData)
+        }
+        if(humidityData==='N/A'){
+          const lastHumidityData = await getHumidityData()
+          setHumidityData(lastHumidityData)
+        }
+        
+      } catch (error:any) {
+        Toast.error(error.response.data.message || 'Network Error')
+      }
+    }
+
+    useEffect(()=>{
+      initData()
+    },[])
+  
     const handleSetPumpStatus =  useCallback((data: '0'| '1')=>{
       if(client){
         console.log(`🚰 Điều khiển máy bơm: ${data}`);
@@ -42,6 +68,7 @@ export default function useMqtt() {
         console.log(`📡 Nhận MQTT: ${topic} -> ${data}`);
         if(topic ===FEED_PUMP){
           setPumpStatus(data)
+          
         }else if (topic ===FEED_DHT_20){
           setDhtData(data)
         }else if(topic===FEED_SOIL_HUMIDITY){
