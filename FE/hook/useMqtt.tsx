@@ -3,8 +3,8 @@ import {
 	ADAFRUIT_AIO_KEY,
 	ADAFRUIT_AIO_USERNAME,
 	FEED_DHT_20,
+	FEED_HUMIDITY,
 	FEED_PUMP,
-	FEED_SOIL_HUMIDITY,
 	MQTT_BROKER,
 } from '@/common/constant';
 import { calculate_heat_index } from '@/lib/util';
@@ -34,9 +34,13 @@ export default function useMqtt() {
 				setHumidityData(lastHumidityData);
 			}
 		} catch (error: any) {
+			console.log(error)
 			Toast.error(error.response.data.message || 'Network Error');
 		}
 	};
+
+	
+
 
 	useEffect(() => {
 		initData();
@@ -67,7 +71,7 @@ export default function useMqtt() {
 			console.log('✅ Kết nối MQTT thành công!');
 			mqttClient.subscribe(FEED_PUMP);
 			mqttClient.subscribe(FEED_DHT_20);
-			mqttClient.subscribe(FEED_SOIL_HUMIDITY);
+			mqttClient.subscribe(FEED_HUMIDITY);
 		});
 		setClient(mqttClient);
 
@@ -79,7 +83,7 @@ export default function useMqtt() {
 				setPumpStatus(data);
 			} else if (topic === FEED_DHT_20) {
 				setDhtData(data);
-			} else if (topic === FEED_SOIL_HUMIDITY) {
+			} else if (topic === FEED_HUMIDITY) {
 				setHumidityData(data);
 			}
 		});

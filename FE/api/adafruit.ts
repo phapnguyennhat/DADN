@@ -12,7 +12,7 @@ export const getDhtData = async ()=>{
 }
 
 export const  getHumidityData = async ()=>{
-  const response = await adafruitConfig.get('feeds/soil-humidity/data/last')
+  const response = await adafruitConfig.get('feeds/humidity/data/last')
   return response.data.value as string
 }
 
