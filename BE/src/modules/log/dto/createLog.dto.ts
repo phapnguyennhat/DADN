@@ -1,16 +1,20 @@
 import { Type } from "class-transformer";
-import { IsEnum, IsNotEmpty, IsNumber } from "class-validator";
+import { IsEnum, IsNotEmpty, IsNumber, IsPositive, Max } from "class-validator";
 import { EPumpStatus, ETypeLog } from "src/database/entity/log.entity";
 
 export class CreateLogDto {
   @IsNotEmpty()
-  @IsNumber()
-  @Type(()=>Number)
+  @IsNumber({maxDecimalPlaces: 1})
+  @Type(() => Number)
+  @IsPositive()
+    @Max(100)
   temperature: number
 
   @IsNotEmpty()
-  @IsNumber()
-  @Type(()=>Number)
+  @IsNumber({maxDecimalPlaces: 1})
+  @Type(() => Number)
+  @IsPositive()
+    @Max(100)
   humidity: number
 
   @IsNotEmpty()

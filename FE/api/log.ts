@@ -6,5 +6,11 @@ export const getLog =async (queryString: string) =>{
 }
 
 export const createLog =async (data: CreateLog) =>{
-  
+  const response = await myApiConfig.post('log', data)
+  return response.data
+}
+
+export const deleteLog = async (id: string)=>{
+  const response = await myApiConfig.delete(`log/${id}`)
+  return response.data
 }

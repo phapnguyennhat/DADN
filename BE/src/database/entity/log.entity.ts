@@ -13,13 +13,13 @@ export enum ETypeLog {
 
 @Entity()
 export class Log extends BaseEntity{
-  @Column()
-  temperature: number
+  @Column({ type: 'decimal', precision: 4, scale: 1 }) // precision: tổng chữ số, scale: số chữ số sau dấu .
+  temperature: number;
 
-  @Column()
-  humidity: number
+  @Column({ type: 'decimal', precision: 4, scale: 1 }) // precision: 4, scale: 1 đảm bảo ví dụ 29.1
+  humidity: number;
 
-  @Column( {type: 'enum', enum: EPumpStatus, })
+  @Column( {type: 'enum', enum: EPumpStatus})
   pumpStatus: EPumpStatus
 
   @Column({type: 'enum', enum:  ETypeLog })

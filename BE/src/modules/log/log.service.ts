@@ -16,7 +16,8 @@ export class LogService {
 
     const [logs, count] = await this.logRepo.findAndCount({
       skip: (page-1)* limit,
-      take: limit
+      take: limit,
+      order: {createAt: 'DESC'}
     })
     return {logs, count}
   }
