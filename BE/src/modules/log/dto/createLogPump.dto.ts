@@ -1,8 +1,8 @@
 import { Type } from "class-transformer";
 import { IsEnum, IsNotEmpty, IsNumber, IsPositive, Max } from "class-validator";
-import { EPumpStatus, ETypeLog } from "src/database/entity/log.entity";
+import { EPumpStatus, ETypeLog } from "src/database/entity/logPump.entity";
 
-export class CreateLogDto {
+export class CreateLogPumpDto {
   @IsNotEmpty()
   @IsNumber({maxDecimalPlaces: 1})
   @Type(() => Number)

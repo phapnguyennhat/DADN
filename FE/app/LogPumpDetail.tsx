@@ -2,12 +2,14 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import TemperatureIcon from '../assets/images/temperature.svg';
+import RainIcon from '../assets/images/rain.png';
+import SunIcon from '../assets/images/sun.svg';
 
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
-export default function LogDetail() {
+export default function LogPumpDetail() {
 	const { log } = useLocalSearchParams();
-	const logJson: Log = JSON.parse(log as string);
+	const logJson: LogPump = JSON.parse(log as string);
 	const router = useRouter();
 
 	return (
@@ -28,12 +30,9 @@ export default function LogDetail() {
 			<View className=" flex-1  items-center justify-center">
 			{ logJson.pumpStatus ==='on'?	<Image
 					className=" mx-auto size-[285px] "
-					source={require('./../assets/images/rain.png')}
+					source={RainIcon}
                 /> :
-                    <Image
-                    className=" mx-auto size-[285px] "
-					source={require('./../assets/images/sun.png')}
-                    />
+                   <SunIcon />
                  }
             </View>
             

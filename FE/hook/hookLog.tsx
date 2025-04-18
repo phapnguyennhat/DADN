@@ -1,29 +1,32 @@
-import { createLog, deleteLog, getLog } from "@/api/log"
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import {   getLogPump, getLogLight, createLogPump, deleteLogPump, createLogLight, deleteLogLight } from "@/api/log"
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { Toast } from "toastify-react-native"
 
-export const useGetLog =  (queryPagination: QueryPagination) =>{
-  const searchParams = new URLSearchParams(queryPagination as any)
-  const queryString = searchParams.toString()
-  
-  const {data: result, isLoading, isError, error, refetch} = useQuery({
-    queryFn: ()=>getLog(queryString),
-    queryKey: ['log', queryString]
-  })
-
-  if(isError){
-    Toast.error((error as any).response.data.message || 'Network Error')
-  }
-
-  return {result, isLoading, refetch}
+export const useInfinityGetLogPump =  () =>{
+  return useInfiniteQuery({
+    queryKey: ['logPump'],
+    queryFn: ({ pageParam }) => getLogPump({pageParam, limit: 10}),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => lastPage.nextPage,
+})
 } 
 
-export const useCreateLog = ()=>{
+export const useInfinityGetLogLight =  () =>{
+  return useInfiniteQuery({
+    queryKey: ['logLight'],
+    queryFn: ({ pageParam }) => getLogLight({pageParam, limit: 10}),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => lastPage.nextPage,
+  })
+}
+
+
+export const useCreateLogPump = ()=>{
   const queryClient = useQueryClient()
   const mutation = useMutation({
-    mutationFn: createLog,
+    mutationFn: createLogPump,
     onSuccess : ()=>{
-      queryClient.invalidateQueries({queryKey: ['log']})
+      queryClient.invalidateQueries({queryKey: ['logPump']})
     },
     onError: (error: any) =>{
       Toast.error(error.response.data.message || 'Network Error')
@@ -32,12 +35,42 @@ export const useCreateLog = ()=>{
   return mutation
 }
 
-export const useDeleteLog = ()=>{
+export const useCreateLogLight = ()=>{
   const queryClient = useQueryClient()
   const mutation = useMutation({
-    mutationFn: deleteLog,
+    mutationFn: createLogLight,
     onSuccess : ()=>{
-      queryClient.invalidateQueries({queryKey: ['log']})
+      queryClient.invalidateQueries({queryKey: ['logLight']})
+    },
+    onError: (error: any) =>{
+      Toast.error(error.response.data.message || 'Network Error')
+    }
+  })
+  return mutation
+} 
+
+
+
+export const useDeleteLogPump = ()=>{
+  const queryClient = useQueryClient()
+  const mutation = useMutation({
+    mutationFn: deleteLogPump,
+    onSuccess : ()=>{
+      queryClient.invalidateQueries({queryKey: ['logPump']})
+    },
+    onError: (error: any) =>{
+      Toast.error(error.response.data.message || 'Network Error')
+    }
+  })
+  return mutation
+}
+
+export const useDeleteLogLight = ()=>{
+  const queryClient = useQueryClient()
+  const mutation = useMutation({
+    mutationFn: deleteLogLight,
+    onSuccess : ()=>{
+      queryClient.invalidateQueries({queryKey: ['logLight']})
     },
     onError: (error: any) =>{
       Toast.error(error.response.data.message || 'Network Error')

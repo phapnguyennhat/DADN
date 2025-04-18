@@ -7,14 +7,15 @@ import {
 	FEED_PUMP,
 	MQTT_BROKER,
 } from '@/common/constant';
-import { calculate_heat_index } from '@/lib/util';
-import { connect, MqttClient } from '@taoqf/react-native-mqtt';
+
+import { useClientMqtt } from '@/provider/MqttProvider';
+
 import { useCallback, useEffect, useState } from 'react';
 import { Toast } from 'toastify-react-native';
 
 
-export default function useMqtt() {
-	const [client, setClient] = useState<MqttClient | null>(null);
+export default function usePump() {
+	const client = useClientMqtt();	
 	const [pumpStatus, setPumpStatus] = useState('N/A');
 	const [dhtData, setDhtData] = useState('N/A');
 	const [humidityData, setHumidityData] = useState('N/A');
@@ -61,24 +62,23 @@ export default function useMqtt() {
 
 	useEffect(() => {
 		// CONNECT TO CLOUD
-		const mqttClient = connect(MQTT_BROKER, {
-			username: ADAFRUIT_AIO_USERNAME,
-			password: ADAFRUIT_AIO_KEY,
-		});
+
+		if(!client) return;
+	
 
 		// SUBCRIBE FEED TO LISTEN
-		mqttClient.on('connect', () => {
+		client.on('connect', () => {
 			console.log('✅ Kết nối MQTT thành công!');
-			mqttClient.subscribe(FEED_PUMP);
-			mqttClient.subscribe(FEED_DHT_20);
-			mqttClient.subscribe(FEED_HUMIDITY);
+			client.subscribe(FEED_PUMP);
+			client.subscribe(FEED_DHT_20);
+			client.subscribe(FEED_HUMIDITY);
 		});
-		setClient(mqttClient);
+		
 
 		// LISTEN MESSAGE
-		mqttClient.on('message', (topic, message) => {
+		client.on('message', (topic, message) => {
 			const data = message.toString();
-			console.log(`📡 Nhận MQTT: ${topic} -> ${data}`);
+			// console.log(`📡 Nhận MQTT: ${topic} -> ${data}`);
 			if (topic === FEED_PUMP) {
 				setPumpStatus(data);
 			} else if (topic === FEED_DHT_20) {
@@ -88,11 +88,8 @@ export default function useMqtt() {
 			}
 		});
 
-		return () => {
-			console.log('🔌 Ngắt kết nối MQTT...');
-			mqttClient.end();
-		};
-	}, []);
+		
+	}, [client]);
 
 	return { pumpStatus, handleSetPumpStatus, dhtData, humidityData , client};
 }

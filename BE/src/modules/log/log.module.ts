@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { LogService } from './log.service';
 import { LogController } from './log.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Log } from 'src/database/entity/log.entity';
-
+import { LogPump } from 'src/database/entity/logPump.entity';
+import { LogLight } from 'src/database/entity/logLight.entity';
 @Module({
-  imports: [TypeOrmModule.forFeature([Log])],
+  imports: [TypeOrmModule.forFeature([LogPump, LogLight])],
   controllers: [LogController],
   providers: [LogService],
 })

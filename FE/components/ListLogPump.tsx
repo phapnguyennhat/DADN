@@ -1,24 +1,34 @@
-import { useDeleteLog, useGetLog } from '@/hook/hookLog';
+import { useDeleteLogPump, useInfinityGetLogPump } from '@/hook/hookLog';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import Feather from '@expo/vector-icons/Feather';
 import { useRouter } from 'expo-router';
 
-export default function ListLog() {
-	const { result, isLoading, refetch } = useGetLog({ page: 1, limit: 10 });
-	const logs = result?.logs;
-	const deleteLog = useDeleteLog()
-	const router= useRouter()
+export default function ListLogPump() {
+	const { data, isLoading, refetch , hasNextPage, fetchNextPage} = useInfinityGetLogPump()
+
+	
+	const deleteLogPump = useDeleteLogPump()
+	const router = useRouter()
+
+	const onReachEnd = () => {
+		if(hasNextPage && !isLoading){
+			fetchNextPage()
+		}
+	}
+	
 	return (
 		<FlatList
 			showsHorizontalScrollIndicator={false}
 			refreshing={isLoading}
-			data={logs}
+			data={data?.pages.flatMap((page) => page.data)}
 			onRefresh={() => refetch()}
+			onEndReached={onReachEnd}
+			
 			renderItem={({ item, index }) => (
 				<TouchableOpacity
 					onPress={() => router.push({
-						pathname: '/LogDetail',
+						pathname: '/LogPumpDetail',
 						params: {log: JSON.stringify(item)}
 					})}
 					className="mb-[17px] flex-row items-center px-[16px] py-[16px] justify-between w-[97%] mx-auto rounded-[11px]  bg-white "
@@ -56,7 +66,7 @@ export default function ListLog() {
 							source={require('./../assets/images/rain.png')}
 						/>
 					)}
-					<TouchableOpacity className=' bg-gray-100 rounded-full p-1'  onPress={()=>deleteLog.mutate(item.id)} >
+					<TouchableOpacity className=' bg-gray-100 rounded-full p-1'  onPress={()=>deleteLogPump.mutate(item.id)} >
 						<Feather name="x" size={24} color="gray" />
 					</TouchableOpacity>
 				</TouchableOpacity>

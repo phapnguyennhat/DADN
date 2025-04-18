@@ -1,22 +1,22 @@
-import useMqtt from '@/hook/useMqtt';
+import usePump from '@/hook/usePump';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { Image, Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import TemperatureIcon from '../assets/images/temperature.svg';
 import HumidiryIcon from '../assets/images/humidity.svg';
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import { useCreateLog } from '@/hook/hookLog';
+
+import {  useCreateLogPump } from '@/hook/hookLog';
 import { useEffect, useMemo } from 'react';
 import { calculate_heat_index } from '@/lib/util';
 
 
 interface IProps {
-    mode: string
+    modePump: string
 }
-export default function CurrentStatus({mode}: IProps) {
+export default function CurrentPumpStatus({modePump}: IProps) {
 	const { pumpStatus, handleSetPumpStatus, humidityData, dhtData } =
-        useMqtt();
+        usePump();
     
-    const createLog = useCreateLog()
+    const createLogPump = useCreateLogPump()
 
 	useEffect(() => {
 		if ( isNaN(+dhtData) || isNaN(+humidityData)) {
@@ -26,31 +26,27 @@ export default function CurrentStatus({mode}: IProps) {
 		const temp_f = (+dhtData * 9) / 5 + 32;
 		const heatIndex = calculate_heat_index(temp_f, +humidityData);
 		console.log('current value', { heatIndex, dhtData, humidityData });
-		if (heatIndex >= 90 && pumpStatus === '0' && mode==='auto') {
-            console.log('turn on');
-            console.log('tao log')
-            createLog.mutate({ humidity: +humidityData, temperature: +dhtData, typeLog: 'auto', pumpStatus: 'on' })
+		if (heatIndex >= 90 && pumpStatus === '0' && modePump==='auto') {
+            createLogPump.mutate({ humidity: +humidityData, temperature: +dhtData, typeLog: 'auto', pumpStatus: 'on' })
             handleSetPumpStatus('1')
             
-		} else if (heatIndex < 90 && pumpStatus === '1' && mode==='auto') {
-            console.log('turn off');
-            console.log('tao log')
-            createLog.mutate({ humidity: +humidityData, temperature: +dhtData, typeLog: 'auto', pumpStatus: 'off' })
+		} else if (heatIndex < 90 && pumpStatus === '1' && modePump==='auto') {
+            createLogPump.mutate({ humidity: +humidityData, temperature: +dhtData, typeLog: 'auto', pumpStatus: 'off' })
             handleSetPumpStatus('0')
 		}
-    }, [humidityData, dhtData, pumpStatus, mode]);
+    }, [humidityData, dhtData, pumpStatus, modePump]);
     
 
-    const disabled = useMemo(()=>(createLog.isPending || mode==='auto'),[mode, createLog.isPending])
+    const disabled = useMemo(()=>(createLogPump.isPending || modePump==='auto'),[modePump, createLogPump.isPending])
 
 	return (
-		<View className="w-[390px] mb-[17px] mx-auto h-[228px] bg-[#10493F] rounded-[24px] flex-row justify-center items-center gap-[29px]  ">
+		<View className="w-[390px]  mx-auto h-[228px] bg-[#10493F] rounded-[24px] flex-row justify-center items-center gap-[29px]  ">
 			{pumpStatus === '1' ? (
 				<TouchableOpacity
 					disabled={disabled}
 					onPress={() => {
 						handleSetPumpStatus('0');
-						createLog.mutate({
+						createLogPump.mutate({
 							humidity: +humidityData,
 							pumpStatus: 'off',
 							temperature: +dhtData,
@@ -70,7 +66,7 @@ export default function CurrentStatus({mode}: IProps) {
 					disabled={disabled}
 					onPress={() => {
                         handleSetPumpStatus('1');
-                        createLog.mutate({humidity: +humidityData, pumpStatus: 'on', temperature: +dhtData, typeLog: 'manual'})
+                        createLogPump.mutate({humidity: +humidityData, pumpStatus: 'on', temperature: +dhtData, typeLog: 'manual'})
                         
 					}}
 					className={` rounded-full size-[128px] bg-[#5AFCDF] justify-center items-center  ${

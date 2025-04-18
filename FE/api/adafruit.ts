@@ -16,3 +16,15 @@ export const  getHumidityData = async ()=>{
   return response.data.value as string
 }
 
+export const getLedStatus = async () => {
+  const response = await adafruitConfig.get('feeds/led-control/data/last')
+  return response.data.value as string
+}
+
+export const getLightData = async () => {
+  const response = await adafruitConfig.get('feeds/light/data/last')
+  return response.data.value as string
+}
+
+
+

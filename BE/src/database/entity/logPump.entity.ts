@@ -12,7 +12,7 @@ export enum ETypeLog {
 }
 
 @Entity()
-export class Log extends BaseEntity{
+export class LogPump extends BaseEntity{
   @Column({ type: 'decimal', precision: 4, scale: 1 }) // precision: tổng chữ số, scale: số chữ số sau dấu .
   temperature: number;
 

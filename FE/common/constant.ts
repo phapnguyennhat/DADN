@@ -12,4 +12,8 @@ export const MQTT_BROKER = process.env.EXPO_PUBLIC_MQTT_BROKER;
 
 export const BASE_URL_ADAFRUIT = `https://io.adafruit.com/api/v2/${ADAFRUIT_AIO_USERNAME}`
 
-export const STALETIME = 5*60*1000
+export const STALETIME = 5 * 60 * 1000
+
+export const FEED_LED_CONTROL = `${process.env.EXPO_PUBLIC_ADAFRUIT_AIO_USERNAME}/feeds/led-control`;
+
+export const FEED_LIGHT = `${process.env.EXPO_PUBLIC_ADAFRUIT_AIO_USERNAME}/feeds/light`;
