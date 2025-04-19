@@ -1,11 +1,9 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import TemperatureIcon from '../assets/images/temperature.svg';
-import RainIcon from '../assets/images/rain.png';
-import SunIcon from '../assets/images/sun.svg';
-
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import React from 'react';
+
 
 export default function LogPumpDetail() {
 	const { log } = useLocalSearchParams();
@@ -28,14 +26,17 @@ export default function LogPumpDetail() {
 			</View>
 
 			<View className=" flex-1  items-center justify-center">
-			{ logJson.pumpStatus ==='on'?	<Image
+				{logJson.pumpStatus === 'on' ? <Image
 					className=" mx-auto size-[285px] "
-					source={RainIcon}
-                /> :
-                   <SunIcon />
-                 }
-            </View>
-            
+					source={require('./../assets/images/rain.png')}
+				/> :
+					<Image
+						className=" mx-auto size-[285px] "
+						source={require('./../assets/images/sun.png')}
+					/>
+				}
+			</View>
+
 			<View className=" w-[96%] mb-[130px] px-[24px] py-[30px] rounded-[38px] mx-auto bg-[#fff]  items-center justify-center  ">
 				<View className=" w-full mb-[30px]  flex-row items-center justify-between">
 					<View className=" inline-flex  flex-row items-center">
@@ -65,13 +66,13 @@ export default function LogPumpDetail() {
 				<Text className=' mb-1 text-primary font-bold  text-2xl' >
 					Trạng thái hoạt động:{' '}
 					<Text className=" uppercase">{logJson.pumpStatus}</Text>
-                </Text>
+				</Text>
 
-                <Text className=' text-primary font-bold  text-2xl' >
+				<Text className=' text-primary font-bold  text-2xl' >
 					Mode:{' '}
 					<Text className=" uppercase">{logJson.typeLog}</Text>
-                </Text>
-                
+				</Text>
+
 			</View>
 		</View>
 	);
