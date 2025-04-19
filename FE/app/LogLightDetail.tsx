@@ -38,8 +38,8 @@ export default function LogLightDetail() {
 			</View>
 
 			<View className=" w-[96%] mb-[130px] px-[24px] py-[30px] rounded-[38px] mx-auto bg-[#fff]  items-center justify-center  ">
-				<View className=" w-full mb-[30px]  flex-row items-center justify-between">
-					<View className=" inline-flex  flex-row items-center">
+				<View className=" w-full mb-[20px]  flex-row items-center justify-between">
+					<View className=" inline-flex mx-auto  flex-row items-center">
 						<Text className="text-2xl font-bold   text-[#10493F]">Cường độ ánh sáng: </Text>
 						<Text className=" ml-2 text-2xl font-bold   text-[#10493F]">
 							{logJson.lightIntensity}
