@@ -1,0 +1,44 @@
+services:
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    restart: always
+    ports:
+      - '80:80'
+    environment:
+      PGADMIN_DEFAULT_EMAIL: nguyennhatphapbp@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: 123456789
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - pgadmin-network
+
+  redis:
+    image: redis:latest
+    container_name: redis_container
+    restart: always
+    ports:
+      - '6379:6379'
+    networks:
+      - redis-network
+
+  redis-commander:
+    image: rediscommander/redis-commander
+    container_name: redis-commander_container
+    restart: always
+    ports:
+      - '9999:8081'
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    networks:
+      - redis-network
+
+volumes:
+  pgadmin-data:
+  redis-data:
+networks:
+  pgadmin-network:
+    driver: bridge
+  redis-network:
+    driver: bridge

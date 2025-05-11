@@ -1,0 +1,6 @@
+Step1: cd regression 
+Step2: python -m venv venv    // create virtual enviroment
+Step3: source venv/bin/activate   // active virtual enviroment
+Step4: pip install -r requirements.txt   // install package
+Step5: python main.py  // run regresion
+
