@@ -13,8 +13,7 @@ export const validationSchema = Joi.object({
   JWT_REFRESH_TOKEN_SECRET: Joi.string().required(),
   JWT_REFRESH_TOKEN_EXPIRATION_TIME: Joi.string().required(),
 
-  REDIS_HOST: Joi.string().required(),
-  REDIS_PORT: Joi.number().required(),
+  REDIS_URL: Joi.string().required(),
 
   ADAFRUIT_AIO_USERNAME: Joi.string().required(),
   ADAFRUIT_AIO_KEY: Joi.string().required(),
